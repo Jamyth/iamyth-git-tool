@@ -1,7 +1,7 @@
 export interface IGitTool {
     run(): void;
     checkHasGit(): void;
-    getLatestVersion(): string;
+    getLatestVersion(): Promise<string>;
 }
 
 export type VersionReference = "git" | "npm";
@@ -9,4 +9,5 @@ export type VersionReference = "git" | "npm";
 export interface GitToolOptions {
     projectDirectory: string;
     versionReference: VersionReference;
+    gitVersionMapper?: (branchName: string) => string;
 }

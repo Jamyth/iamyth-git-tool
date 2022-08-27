@@ -1,24 +1,30 @@
-function compare(a: string, b: string): 1 | -1 {
+function compare(a: string, b: string): 1 | -1 | 0 {
     assertVersion(a);
     assertVersion(b);
     const [aMajor, aMinor, aPatch] = extractVersion(a);
     const [bMajor, bMinor, bPatch] = extractVersion(b);
 
     if (aMajor > bMajor) {
-        return 1;
-    } else if (bMajor > aMajor) {
         return -1;
+    } else if (bMajor > aMajor) {
+        return 1;
     }
 
     if (aMinor > bMinor) {
-        return 1;
-    } else if (bMinor > aMinor) {
         return -1;
+    } else if (bMinor > aMinor) {
+        return 1;
     }
 
-    // if() {
+    if (typeof bPatch === "number" && typeof aPatch === "number") {
+        if (aPatch > bPatch) {
+            return -1;
+        } else if (bPatch > aPatch) {
+            return 1;
+        }
+    }
 
-    // }
+    return 0;
 }
 
 function assertVersion(value: string) {
@@ -48,3 +54,5 @@ function extractVersion(value: string): [number, number, string | number] {
 
     return [Number(major), Number(minor), Number.isNaN(parsedPatch) ? patch : parsedPatch];
 }
+
+export const VersionUtil = Object.freeze({ compare });
